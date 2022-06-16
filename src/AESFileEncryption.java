@@ -1,33 +1,27 @@
-package app.funcionality;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
 import java.security.AlgorithmParameters;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
-import java.security.InvalidAlgorithmParameterException;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
+import java.security.spec.InvalidParameterSpecException;
+import java.security.InvalidAlgorithmParameterException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.BadPaddingException;
@@ -35,14 +29,10 @@ import javax.crypto.Cipher;
 
 public class AESFileEncryption {
 
-	/**
-	 * Método para generar una kay apartir de un string 
-	 * @param password
-	 * @return secret
-	 * @throws InvalidKeySpecException
-	 * @throws InvalidKeyException
-	 * @throws NoSuchAlgorithmException
-	 */
+    /*
+     * Método para obtener la contraseña segura apartir el string que 
+     * se le pide al usuario
+     */
     public static SecretKey getSecretKey(String password)throws InvalidKeySpecException,InvalidKeyException,
 	NoSuchAlgorithmException {
 
@@ -55,39 +45,46 @@ public class AESFileEncryption {
         return secret;
 
     }
-	/**
-	 * Método para encriptar un archivo aprtir de una key
-	 * @param in nombre del archivo
-	 * @param secret de tipo SecretKey
-	 * @throws InvalidKeyException
-	 * @throws InvalidParameterSpecException
-	 * @throws IllegalBlockSizeException
-	 * @throws NoSuchAlgorithmException
-	 * @throws FileNotFoundException
-	 * @throws BadPaddingException
-	 * @throws NoSuchPaddingException
-	 * @throws IOException
-	 */
 
-    public static void encript(String in, SecretKey secret) throws InvalidKeyException,InvalidParameterSpecException,IllegalBlockSizeException,
-	NoSuchAlgorithmException,FileNotFoundException,BadPaddingException, NoSuchPaddingException,IOException{
+    public static void encript(String in, SecretKey secret)
+	throws InvalidKeyException,InvalidParameterSpecException,IllegalBlockSizeException,
+	NoSuchAlgorithmException,FileNotFoundException,BadPaddingException,
+	NoSuchPaddingException,
+	IOException
+	{
+        // file to be encrypted
 		FileInputStream inFile = new FileInputStream(in);
+
+		// encrypted file
 		FileOutputStream outFile = new FileOutputStream("encryptedfile.des");
+        // password, iv and salt should be transferred to the other end
+		// in a secure manner
+
+		// salt is used for encoding
+		// writing it to a file
+		// salt should be transferred to the recipient securely
+		// for decryption
 		byte[] salt = new byte[8];
 		SecureRandom secureRandom = new SecureRandom();
 		secureRandom.nextBytes(salt);
 		FileOutputStream saltOutFile = new FileOutputStream("salt.enc");
 		saltOutFile.write(salt);
 		saltOutFile.close();
-
+        	//
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		cipher.init(Cipher.ENCRYPT_MODE, secret);
 		AlgorithmParameters params = cipher.getParameters();
 
+		// iv adds randomness to the text and just makes the mechanism more
+		// secure
+		// used while initializing the cipher
+		// file to store the iv
 		FileOutputStream ivOutFile = new FileOutputStream("iv.enc");
 		byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
 		ivOutFile.write(iv);
 		ivOutFile.close();
+
+		//file encryption
 		byte[] input = new byte[64];
 		int bytesRead;
 
@@ -110,31 +107,29 @@ public class AESFileEncryption {
 		}
 
         /**
-		 * Método para descencriptar un archivo apartit de la key
-		 * @param secret de tipo SecretKey 
-		 * @throws BadPaddingException
-		 * @throws InvalidKeyException
-		 * @throws NoSuchPaddingException
-		 * @throws InvalidAlgorithmParameterException
-		 * @throws IllegalBlockSizeException
-		 * @throws FileNotFoundException
-		 * @throws NoSuchAlgorithmException
-		 * @throws IOException
-		 */
+         * Método para descencrptar apartir de la key
+         * @param secret
+         */
         public static void descript(SecretKey secret) throws BadPaddingException,
 		InvalidKeyException,NoSuchPaddingException, InvalidAlgorithmParameterException,
-		IllegalBlockSizeException,FileNotFoundException,NoSuchAlgorithmException,IOException{
-      
+		IllegalBlockSizeException,FileNotFoundException,NoSuchAlgorithmException,IOException
+		
+		{
+        // reading the salt
+		// user should have secure mechanism to transfer the
+		// salt, iv and password to the recipient
 		FileInputStream saltFis = new FileInputStream("salt.enc");
 		byte[] salt = new byte[8];
 		saltFis.read(salt);
 		saltFis.close();
 
+		// reading the iv
 		FileInputStream ivFis = new FileInputStream("iv.enc");
 		byte[] iv = new byte[16];
 		ivFis.read(iv);
 		ivFis.close();
 
+		// file decryption
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
 		FileInputStream fis = new FileInputStream("encryptedfile.des");
@@ -156,5 +151,10 @@ public class AESFileEncryption {
 		System.out.println("File Decrypted.");
 	
         }
+	public static void main(String[] args) throws Exception {
+        SecretKey secret= getSecretKey("password");
+        encript("prueba.txt",secret);
+
+    }
 
 }
