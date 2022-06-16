@@ -138,7 +138,7 @@ public class AESFileEncryption {
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
 		FileInputStream fis = new FileInputStream("encryptedfile.des");
-		FileOutputStream fos = new FileOutputStream("plainfile_decrypted.txt");
+		FileOutputStream fos = new FileOutputStream("plainfile_decrypted.png");
 		byte[] in = new byte[64];
 		int read;
 		while ((read = fis.read(in)) != -1) {
