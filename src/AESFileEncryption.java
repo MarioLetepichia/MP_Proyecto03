@@ -1,15 +1,31 @@
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.AlgorithmParameters;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import java.security.InvalidKeyException;
+import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.BadPaddingException;
+import java.security.spec.InvalidParameterSpecException;
+import java.security.InvalidAlgorithmParameterException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.IllegalBlockSizeException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 
 public class AESFileEncryption {
 
@@ -17,10 +33,11 @@ public class AESFileEncryption {
      * Método para obtener la contraseña segura apartir el string que 
      * se le pide al usuario
      */
-    public static SecretKey getSecretKey(String password){
+    public static SecretKey getSecretKey(String password)throws InvalidKeySpecException,InvalidKeyException,
+	NoSuchAlgorithmException {
 
-        SecretKeyFactory factory = SecretKeyFactory
-        .getInstance("PBKDF2WithHmacSHA1");
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		byte[] salt = new byte[8];
         KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536,
         256);
         SecretKey secretKey = factory.generateSecret(keySpec);
@@ -29,9 +46,14 @@ public class AESFileEncryption {
 
     }
 
-    public static void encript(FileInputStream inFile, SecretKey secret){
+    public static void encript(String in, SecretKey secret)
+	throws InvalidKeyException,InvalidParameterSpecException,IllegalBlockSizeException,
+	NoSuchAlgorithmException,FileNotFoundException,BadPaddingException,
+	NoSuchPaddingException,
+	IOException
+	{
         // file to be encrypted
-		inFile = new FileInputStream("prueba2.txt");
+		FileInputStream inFile = new FileInputStream(in);
 
 		// encrypted file
 		FileOutputStream outFile = new FileOutputStream("encryptedfile.des");
@@ -88,7 +110,11 @@ public class AESFileEncryption {
          * Método para descencrptar apartir de la key
          * @param secret
          */
-        public static void descript(SecretKey secret){
+        public static void descript(SecretKey secret) throws BadPaddingException,
+		InvalidKeyException,NoSuchPaddingException, InvalidAlgorithmParameterException,
+		IllegalBlockSizeException,FileNotFoundException,NoSuchAlgorithmException,IOException
+		
+		{
         // reading the salt
 		// user should have secure mechanism to transfer the
 		// salt, iv and password to the recipient
@@ -126,9 +152,8 @@ public class AESFileEncryption {
 	
         }
 	public static void main(String[] args) throws Exception {
-
         SecretKey secret= getSecretKey("password");
-        descript(secret);
+        encript("prueba.txt",secret);
 
     }
 
