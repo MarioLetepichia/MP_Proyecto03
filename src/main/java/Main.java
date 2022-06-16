@@ -1,5 +1,5 @@
-import app.funcionality.PolynomialInterpolation;
-import app.funcionality.RandomPolynomial;
+import app.funcionality.*;
+
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -1,34 +1,39 @@
+package app.funcionality;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 import java.security.AlgorithmParameters;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
+import java.security.InvalidAlgorithmParameterException;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
-import java.security.spec.InvalidParameterSpecException;
-import java.security.InvalidAlgorithmParameterException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.IllegalBlockSizeException;
-import java.io.UnsupportedEncodingException;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 
 public class AESFileEncryption {
-
     /*
      * Método para obtener la contraseña segura apartir el string que 
      * se le pide al usuario
@@ -151,10 +156,5 @@ public class AESFileEncryption {
 		System.out.println("File Decrypted.");
 	
         }
-	public static void main(String[] args) throws Exception {
-        SecretKey secret= getSecretKey("password");
-        encript("prueba.txt",secret);
-
-    }
 
 }
