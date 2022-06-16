@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import java.security.AlgorithmParameters;
 import java.security.SecureRandom;
@@ -20,18 +19,11 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import java.util.Arrays;
-import java.util.Base64;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 
 public class AESFileEncryption {
 
