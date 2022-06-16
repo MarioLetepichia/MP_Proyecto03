@@ -5,13 +5,21 @@ import java.util.Random;
 
 import org.javatuples.Pair;
 
+/**
+ * Clase generadora de polinomios psudoaleatorios
+ * @author MarioLetepichia
+ * @version 1.0.2
+ * @since semestre 2022-2
+ */
 public class RandomPolynomial {
     //Contiene el escalar de la n-esima potencia de x (x^n)
     int[] exponents;
     BigInteger independent;
 
-    //Constructores
-    //Sin termino independiente
+    /**
+     * Constructor 01 - Genera un polinomio aleatorio sin termino independiente
+     * @param p Grado del polinomio
+     */
     public RandomPolynomial(int p){
         Random rn = new Random();
         exponents = new int[p];
@@ -20,7 +28,11 @@ public class RandomPolynomial {
             exponents[i] = getRandomCoefficient(rn);
     }
 
-    //Con termino independiente
+    /**
+     * Constructor 02 - Genera un polinomio aleatorio
+     * @param p Grado del polinomio
+     * @param ind  Valor que tendra el termino independiente
+     */
     public RandomPolynomial(int p, String ind){
         Random rn = new Random();
         exponents = new int[p];
@@ -29,20 +41,33 @@ public class RandomPolynomial {
             exponents[i] = getRandomCoefficient(rn);
     }
 
-    //Crear un polinomio especifico
+    /**
+     * Constructor 03 - Crea un polinomio especifico
+     * @param p Arreglo de enteros que contiene las potencias del polinomio
+     * @param ind Valor que tendra el termino independiente
+     */
     public RandomPolynomial(int[] p, BigInteger ind){
         exponents = p;
         independent = ind;
     }
 
+    /**
+     * @return Arreglo que contiene los exponentes del polinomio
+     */
     public int[] getExponents(){
         return exponents;
     }
 
+    /**
+     * @return Grado del polinomio
+     */
     public int getGrade(){
         return exponents.length;
     }
 
+    /**
+     * Procesa el polinomio para mostrar su representacion escrita
+     */
     @Override
     public String toString(){
         String result = "";
@@ -80,6 +105,11 @@ public class RandomPolynomial {
         return result;
     }
 
+    /**
+     * Evalua el polinomio en un punto especifico
+     * @param x Punto a evaluar
+     * @return Evaluacion del polinomio en x 
+     */
     public BigInteger evaluate(int x){
         //Utilizaremos el m'etodo de horner para evaluar los polinomios
         int r = 0;
@@ -93,6 +123,12 @@ public class RandomPolynomial {
         return result;
     }
 
+    /**
+     * Genera una lista de tuplas, cada tupla contiene en [0] su valor x y en [1] su
+     * evaluacion del polinomio. Cada entrada es generada aleatoriamente.
+     * @param n Numero de tuplas a generar
+     * @return  Lista de tuplas generadas
+     */
     public ArrayList<Pair<BigInteger, BigInteger>> getNPoints(Integer n){
         ArrayList<Pair<BigInteger, BigInteger>> evaluations = new ArrayList<>();
         Random rn = new Random();
@@ -107,13 +143,12 @@ public class RandomPolynomial {
     }
 
     /**
-     * Metodos por implementar...
-     * - Evaluacion en un punto x = i
+     * Metodo auxiliar para generar un coeficiente aleatorio; el rango va de -1495628564 a 1495628564.
+     * @param rn Objeto para generar los randoms
+     * @return Coeficiente aleatorio dentro del rango especificado
      */
-    //1495628564
-    //Metodo auxiliar para generar los escalares aleatorios
     private int getRandomCoefficient(Random rn){
-        int number = rn.nextInt(1000);
+        int number = rn.nextInt(1495628564);
         if((rn.nextInt(2)) == 1)
             number -= 2*number;
         return number;

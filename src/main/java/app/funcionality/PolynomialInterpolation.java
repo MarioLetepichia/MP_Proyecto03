@@ -1,17 +1,25 @@
 package app.funcionality;
 
 import org.javatuples.Pair;
-
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+/**
+ * Clase encargada de generar el polinomio de interpolacion y recuperar el termino independiente del 
+ * supuesto polinomio desconocido.
+ * @author MarioLetepichia
+ * @version 1.0.2
+ * @since semestre 2022-2
+ */
 public class PolynomialInterpolation{
     //cada punto [x, f(x)=y]
     private BigInteger[] independentTerms;
     private BigInteger[] dependentTerms;
 
-
+    /**
+     * Constructor 01 - Recibe una lista de puntos e inicializa la clase
+     * @param list Lista de tuplas [x,P(x)]
+     */
     public PolynomialInterpolation(ArrayList<Pair<BigInteger, BigInteger>> list) {
         independentTerms = new BigInteger[list.size()];
         dependentTerms = new BigInteger[list.size()];
@@ -21,7 +29,11 @@ public class PolynomialInterpolation{
         }
     }
 
-    //Solo es necesario calcularla en el cero
+    /**
+     * Metodo principal que calcula el polinomio de interpolacion en el valor 0 para 
+     * recuperar unicamente el termino independiente
+     * @return  Termino independiente
+     */
     public BigInteger calculateIndependent(){
         BigInteger result = BigInteger.ZERO;
         BigInteger temp;
@@ -34,6 +46,12 @@ public class PolynomialInterpolation{
         return result;
     }
 
+    /**
+     * Metedo auxiliar de 'calculateIndependent' para calcular el polinomio base de cada punto
+     * @param x Punto del cual se calculara su polinomio base
+     * @param pos Posicion en el array de dicho punto
+     * @return El polinomio base en forma de tupla [numerador, denominador]
+     */
     private Pair<BigInteger, BigInteger> polynomialBaseAtZero(BigInteger x, Integer pos){
         BigInteger result = BigInteger.ONE;
         BigInteger denom = BigInteger.ONE;
