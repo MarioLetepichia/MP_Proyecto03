@@ -60,8 +60,11 @@ java Main c nombreArchivoA n t nombreArchivoB
 ```
 donde: 
 nombreArchivoA , archivo donde se guardaran las n evaluaciones
+
 n= numero de evaluaciones requeridas (n>2)
+
 t= El número mínimo de puntos necesarios para descifrar (1 < t ≤ n).
+
 nombreArchivoB= nombre del archivo a cifrar.
 
 En el caso en el que quieras decifrar:
@@ -69,4 +72,5 @@ En el caso en el que quieras decifrar:
 java Main d nombreArchivoA nombreArchivoB
 ```
 nombreArchivoA= nombre que contiene las t evaluaciones
+
 nombreArchivoB= nombre del archivo cifrado.
