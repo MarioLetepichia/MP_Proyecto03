@@ -57,7 +57,6 @@ public class FileProcessor {
 
     try {
         Files.write(output,redifinedLines);
-        System.out.println(output.toFile().getAbsolutePath());
     } catch (Exception e) {
         e.printStackTrace();
     }

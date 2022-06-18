@@ -67,7 +67,7 @@ public class AESFileEncryption {
     String[] fileName = in.split("/");
     FileProcessor.saveFileName(fileName[fileName.length - 1]);
 		FileInputStream inFile = new FileInputStream(in);
-		FileOutputStream outFile = new FileOutputStream("resources/encrypted/encryptedFile.enc");
+		FileOutputStream outFile = new FileOutputStream("resources/encrypted/encryptedFile.aes");
 		byte[] salt = new byte[8];
 		SecureRandom secureRandom = new SecureRandom();
 		secureRandom.nextBytes(salt);
