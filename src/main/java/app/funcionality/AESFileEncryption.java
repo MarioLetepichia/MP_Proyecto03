@@ -63,12 +63,15 @@ public class AESFileEncryption {
 
     public static void encript(String in, SecretKey secret) throws InvalidKeyException,InvalidParameterSpecException,IllegalBlockSizeException,
 	NoSuchAlgorithmException,FileNotFoundException,BadPaddingException, NoSuchPaddingException,IOException{
+    //Creacion del archivo extra que contiene el nombre del archivo original
+    String[] fileName = in.split("/");
+    FileProcessor.saveFileName(fileName[fileName.length - 1]);
 		FileInputStream inFile = new FileInputStream(in);
-		FileOutputStream outFile = new FileOutputStream("encryptedfile.des");
+		FileOutputStream outFile = new FileOutputStream("resources/encrypted/encryptedFile.enc");
 		byte[] salt = new byte[8];
 		SecureRandom secureRandom = new SecureRandom();
 		secureRandom.nextBytes(salt);
-		FileOutputStream saltOutFile = new FileOutputStream("salt.enc");
+		FileOutputStream saltOutFile = new FileOutputStream("resources/encrypted/aux/salt.enc");
 		saltOutFile.write(salt);
 		saltOutFile.close();
 
@@ -76,7 +79,7 @@ public class AESFileEncryption {
 		cipher.init(Cipher.ENCRYPT_MODE, secret);
 		AlgorithmParameters params = cipher.getParameters();
 
-		FileOutputStream ivOutFile = new FileOutputStream("iv.enc");
+		FileOutputStream ivOutFile = new FileOutputStream("resources/encrypted/aux/iv.enc");
 		byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
 		ivOutFile.write(iv);
 		ivOutFile.close();
@@ -113,24 +116,26 @@ public class AESFileEncryption {
 		 * @throws NoSuchAlgorithmException
 		 * @throws IOException
 		 */
-        public static void descript(SecretKey secret) throws BadPaddingException,
+        public static void descript(SecretKey secret, String EncryptedFile) throws BadPaddingException,
 		InvalidKeyException,NoSuchPaddingException, InvalidAlgorithmParameterException,
 		IllegalBlockSizeException,FileNotFoundException,NoSuchAlgorithmException,IOException{
       
-		FileInputStream saltFis = new FileInputStream("salt.enc");
+		FileInputStream saltFis = new FileInputStream("resources/encrypted/aux/salt.enc");
 		byte[] salt = new byte[8];
 		saltFis.read(salt);
 		saltFis.close();
 
-		FileInputStream ivFis = new FileInputStream("iv.enc");
+		FileInputStream ivFis = new FileInputStream("resources/encrypted/aux/iv.enc");
 		byte[] iv = new byte[16];
 		ivFis.read(iv);
 		ivFis.close();
 
+    String fileName = FileProcessor.getFileName("resources/encrypted/aux/fileName.txt");
+
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
-		FileInputStream fis = new FileInputStream("encryptedfile.des");
-		FileOutputStream fos = new FileOutputStream("plainfile_decrypted.png");
+		FileInputStream fis = new FileInputStream(EncryptedFile);
+		FileOutputStream fos = new FileOutputStream(String.format("resources/%s", fileName));
 		byte[] in = new byte[64];
 		int read;
 		while ((read = fis.read(in)) != -1) {
